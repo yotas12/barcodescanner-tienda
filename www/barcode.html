@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" href="css/black-dashboard.min.css" />
+    <link rel="stylesheet" href="css/nucleo-icons.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+    <title>LECTOR CODIGO BARRAS</title>
+
+</head>
+
+<body>
+    <div class="app">
+        <br>
+        <h1>ESCANEAR PRODUCTOS</h1>
+        <div id="deviceready" class="blink">
+            <p class="event listening">CONECTANDO DISPOSITIVO</p>
+            <p class="event received">DISPOSITIVO CONECTADO</p>
+        </div>
+        <br/>
+        <div class="container-fluid">
+            <div class="nav justify-content-center">
+                <img src="img/Imagen_1_A0_Rectangle_3_pattern.png">
+            </div>
+            <br/>
+            <div class="nav justify-content-center">
+                <button class="btn btn-success" style="color:Tomato;" onclick="barcodescanner()">leer Codigo de Barras</button>
+            </div>
+        </div>
+    </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+
+                <table class="table tablesorter " id="myTable">
+                    <thead>
+                        <th>id</th>
+                      
+                        <th> producto</th>
+                        <th> precio</th>
+                    </thead>
+                    <tbody id="TableData1">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div>
+        <input type="hidden" id="yy" value="">
+        
+<br>  
+
+    </div>
+    <footer>
+        <div class="nav justify-content-end">
+                <a href="index.html" class="btn btn-success btn-md btn-icon" style="color:Tomato;" id="agregar"><i class="tim-icons icon-double-left"></i></a>
+        </div>
+    </footer>
+    <div class="rowCount1"></div>
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+    $("#yy").change(function(){
+        var y = $(this).val();
+        
+        yy( ''+y+''); 
+});
+
+(function($){
+    var originalVal = $.fn.val;
+    $.fn.val = function(){
+        var result =originalVal.apply(this,arguments);
+        if(arguments.length>0)
+            $(this).change();
+        return result;
+    };
+})(jQuery);
+
+    </script>
+
+</body>
+
+</html>

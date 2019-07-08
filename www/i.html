@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" href="css/black-dashboard.min.css" />
+    <link rel="stylesheet" href="css/nucleo-icons.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+    <title>AGREGAR CODIGO BARRAS</title>
+
+</head>
+
+<body>
+    <div class="app">
+        <br>
+        <h1>agregar productos</h1>
+        <div id="deviceready" class="blink">
+            <p class="event listening">CONECTANDO DISPOSITIVO</p>
+            <p class="event received">DISPOSITIVO CONECTADO</p>
+        </div>
+        <br/>
+        <div class="container-fluid">
+            <div class="nav justify-content-center">
+                <img src="img/Imagen_1_A0_Rectangle_3_pattern.png">
+            </div>
+            <br/>
+            <div class="nav justify-content-center">
+                <button class="btn btn-success" style="color:Tomato;" onclick="barcodescanner()">leer Codigo de Barras</button>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="container ">
+
+        <input type="text" class="form-control bg-white text-warning" id="codigo" placeholder="codigo de barras" value="">
+        <input type="text" class="form-control bg-white text-success" id="producto" placeholder="producto" value="">
+        <input type="text" class="form-control bg-white text-success" id="precio" placeholder="precio" value="">
+        <div class="row nav justify-content-center">
+                <a href="index.html" class="btn btn-success btn-md btn-icon" style="color:Tomato;" id="RETROCESO"><i class="tim-icons icon-double-left"></i></a>
+        <button class="btn btn-info btn-md btn-icon"  id="agregar"><i class="tim-icons icon-simple-add"></i></button>
+        <button class="btn btn-danger  btn-md btn-icon" onclick="drop()"><i class="tim-icons icon-simple-remove"></i></button>
+            </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+
+                <table class="table tablesorter " id="myTable">
+                    <thead>
+                        <th>id</th>
+                        <th>codigo</th>
+                        <th> producto</th>
+                        <th> precio</th>
+                    </thead>
+                    <tbody id="TableData">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="rowCount"></div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        $("#agregar").click(function() {
+            var mydb = window.openDatabase('test', '1.0', 'My test database', 1024 * 1024, function(mydb) {});
+            var codigo = null;
+            var producto = null;
+            var precio = null;
+            codigo = $("#codigo").val();
+            producto = $("#producto").val();
+            precio = $("#precio").val();
+            if((codigo != "") && (producto != "") && (precio != "")){
+                mydb.transaction(function(transaction) {
+                var executeQuery = "INSERT INTO Prueba (codigo, producto, precio) VALUES (?,?,?)";
+                transaction.executeSql(executeQuery, [codigo, producto, precio], function(tx, result) {
+                        alert('Inserted');
+                        $("#TableData").empty();
+                        $("#codigo ").val('');
+                        $("#producto").val('');
+                        $("#precio").val('');
+                        mostar();
+                    },
+                    function(error) {
+                        alert('Error occurred');
+                    });
+            });
+
+        }
+        });
+        function drop(){
+    var mydb = window.openDatabase('test', '1.0', 'My test database', 1024 * 1024, function(mydb) {});
+    mydb.transaction(function(transaction) {
+        var executeQuery = "DROP TABLE IF EXISTS Prueba";
+        transaction.executeSql(executeQuery, [],
+        function(tx, result) {alert('Table deleted successfully.');
+        $("#TableData").empty();
+        mostar();
+    },
+        function(error){alert('Error occurred while droping the table.');}
+        );
+        
+        });
+    }
+    </script>
+    <script type="text/javascript">
+        mostar();
+    </script>
+</body>
+
+</html>
